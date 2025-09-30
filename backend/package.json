@@ -1,15 +1,15 @@
 {
-  "name": "crm-backend-express",
-  "version": "1.0.1",
-  "private": true,
+  "name": "crm-backend",
+  "version": "1.0.0",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
+    "express": "^4.19.2",
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "pg": "^8.11.5"
   },
   "engines": {
-    "node": ">=18 <21"
+    "node": "20.x"
   }
 }
