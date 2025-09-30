@@ -5,21 +5,31 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Endpoint de salud
-app.get('/health', (req, res) => {
-  res.json({ ok: true, message: 'CRM backend funcionando 🚀' });
+// Logger simple para ver las peticiones en Render
+app.use((req, res, next) => {
+  console.log(req.method, req.url);
+  next();
 });
 
-// Endpoint de login de prueba
-app.post('/auth/login', (req, res) => {
-  const { email, password } = req.body;
+// Salud
+app.get('/health', (req, res) => {
+  res.json({ ok: true, service: 'crm-backend-express', ts: new Date().toISOString() });
+});
+
+// Handler de login compartido
+function handleLogin(req, res) {
+  const { email, password } = req.body || {};
   if (email === 'admin@demo.dev' && password === 'admin') {
     return res.json({ token: 'fake-jwt-token', user: { email, role: 'admin' } });
   }
-  res.status(401).json({ error: 'Credenciales inválidas' });
-});
+  return res.status(401).json({ error: 'Credenciales inválidas' });
+}
 
-// Endpoint de deals (ejemplo simple)
+// Soportar ambas rutas: /login y /auth/login
+app.post('/login', handleLogin);
+app.post('/auth/login', handleLogin);
+
+// Ejemplo de deals
 app.get('/deals', (req, res) => {
   res.json([
     { id: 1, title: 'ACME Corp 12k', stage: 'Prospecto' },
